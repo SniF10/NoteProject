@@ -1,0 +1,27 @@
+<aura:component
+        implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+        controller="MainComponentController">
+
+    <aura:attribute name="notesData"    type="CustomNotes__c[]" default=""/>
+
+    <aura:handler name="init" value="{!this }" action="{!c.doInit}"/>
+    <aura:handler event="c:notesData" action="{!c.handleApplicationEvent}"/>
+
+    <ltng:require  styles="{!$Resource.FontAwesome + '/fontawesome-free-5.9.0-web/css/all.css'}"  />
+
+
+    <div>
+        <c:StatusBar notesData="{!v.notesData}"/>
+
+        <div class="flex-container">
+            <aura:iteration items="{!v.notesData}" var="notes">
+
+                <c:CustomNotesTab tabNotesData="{!notes}"/>
+
+            </aura:iteration>
+        </div>
+    </div>
+</aura:component>
+
+
+

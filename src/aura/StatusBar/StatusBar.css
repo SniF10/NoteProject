@@ -1,0 +1,14 @@
+.THIS {
+}
+
+.THIS .navbar{
+    display: flex;
+    width: 100%;
+    height: 3.5rem;
+    background-color: rgb(255, 255, 255);
+    border-bottom: 3px solid rgb(21, 137, 238);
+    color: rgb(22, 50, 92);
+    position: fixed;
+    padding: 0 0 0 1.5rem;
+    z-index: 3;
+}

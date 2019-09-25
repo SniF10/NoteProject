@@ -1,0 +1,86 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+                controller="StatusBarController">
+
+    <aura:attribute name="notesData"        type="CustomNotes__c[]" default=""/>
+    <aura:attribute name="sortSelect"       type="String"           default="Lowest"/>
+    <aura:attribute name="sortIcon"         type="String"           default="utility:arrowup"/>
+    <aura:attribute name="isOpen"           type="boolean"          default="false"/>
+    <aura:attribute name="newNote"          type="CustomNotes__c"   default="{ 'sobjectType': 'CustomNotes__c',
+                                                                                              'Name': '',
+                                                                                              'Description__c': '',
+                                                                                              'Priority__c': ''}"/>
+
+    <aura:attribute name="options"          type="List"             default="[  {'label': 'High', 'value': 'High'},
+                                                                                {'label': 'Medium', 'value': 'Medium'},
+                                                                                {'label': 'Low', 'value': 'Low'}]"/>
+
+    <aura:attribute name="userIdStatusBar"  type="String"           default=""/>
+    <aura:attribute name="activeSections"   type="List"             default="[]" />
+
+    <aura:handler event="c:newCaseEvent" action="{!c.handleApplicationEvent}"/>
+
+    <div class="navbar">
+        <nav class="navbar" role="navigation">
+            <div class="slds-p-left_medium slds-p-top_small">
+            <lightning:button label="New Note" title="New Note" onclick="{! c.openModal }"/>
+            </div>
+            <div class="slds-p-left_medium slds-p-top_small" onclick="{!c.sortPriority }">
+                Sort by priority:
+                <lightning:icon iconName="{!v.sortIcon}" alternativeText="arrowup" />
+            </div>
+        </nav>
+    </div>
+
+    <aura:if isTrue="{!v.isOpen}">
+
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeModal }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Note</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:input type="text" name="Subject" label="Subject" value="{!v.newNote.Name}"
+                                     required="true"/>
+                    <lightning:input type="text" name="Description" label="Description"
+                                     value="{!v.newNote.Description__c}"/>
+                    <lightning:select name="select1" label="Select Priority" value="{!v.newNote.Priority__c}">
+                        <option value="">choose one...</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </lightning:select>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="neutral"
+                                      label="Cancel"
+                                      title="Cancel"
+                                      onclick="{! c.closeModal }"/>
+                    <lightning:button variant="brand"
+                                      label="Save"
+                                      title="Save"
+                                      onclick="{! c.newNote }"/>
+
+                    <lightning:accordion
+                            allowMultipleSectionsOpen="true"
+                            activeSectionName="{! v.activeSections }"
+                    >
+                        <lightning:accordionSection label="Show More">
+                            <aura:set attribute="body">
+                                <c:NewCase/>
+                            </aura:set>
+                        </lightning:accordionSection>
+                    </lightning:accordion>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+    </aura:if>
+
+</aura:component>
